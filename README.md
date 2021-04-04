@@ -21,7 +21,7 @@ $ omf install trish
 ...after I request OMF maintainers to add trish to their repos. For now, I'd recommend manually putting the files in your fish functions folder:
 
 ```fish
-$ wget https://github.com/victante/trish
+$ git clone https://github.com/victante/trish
 $ mv trish/functions/* ~/.config/fish/functions
 ```
 
