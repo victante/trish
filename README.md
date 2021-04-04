@@ -12,8 +12,17 @@
 
 ## Install
 
+It will be possible to install with
+
 ```fish
 $ omf install trish
+```
+
+...after I request OMF maintainers to add trish to their repos. For now, I'd recommend manually putting the files in your fish functions folder:
+
+```fish
+$ wget https://github.com/victante/trish
+$ mv trish/functions/* ~/.config/fish/functions
 ```
 
 
@@ -22,6 +31,26 @@ $ omf install trish
 ```fish
 $ trish
 ```
+
+
+## Missing parts
+
+These still need to be implemented:
+
+- The whole trishr function (to restore files from the trash);
+- The help argument in each function;
+- This Readme file, explaining how to use each function.
+
+These are already working:
+
+- trish function (to put files in the trash);
+- trishl function (to list what's in the trash);
+- trishc function (to clear the trash, or parts of it).
+
+
+## The name
+
+'Trish' is a mashup of 'trash' and 'fish'. Kinda obvious, but I'm personally very proud of it.
 
 
 # License
