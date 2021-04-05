@@ -1,4 +1,4 @@
-function __trish_find_trash -S
+function __trish_find_trash -a NAME -S
 	# Locate the Trash folder
 	if not set -q XDG_DATA_HOME
 		set XDG_DATA_HOME ~/.local/share
@@ -10,6 +10,15 @@ function __trish_find_trash -S
 	set itemlist (command ls -a $trash/files)
 	set -e itemlist[1 2] # remove '.' and '..' directories
 	set trashcount (count $itemlist)
-	printf '%s\n' $trash $itemlist $trashcount
+	
+	# Results
+	switch $NAME
+		case 'trash'
+			echo $trash
+		case 'itemlist'
+			echo $itemlist
+		case 'trashcount'
+			echo $trashcount
+	end
 	return 0
 end

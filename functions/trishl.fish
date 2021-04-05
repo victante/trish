@@ -9,7 +9,9 @@ function trishl -d 'List the contents of the trashcan'
 	end
 
 	# Variables common to all trish functions
-	set common (__trish_find_trash) ; set trash $common[1] ; set itemlist $common[2]
+	set trash (__trish_find_trash trash)
+	set itemlist (__trish_find_trash itemlist)
+	set trashcount (__trish_find_trash trashcount)
 
 	# "PEEK" ARGUMENT - print the contents of a specified directory in the trashcan
 	if set -q _flag_peek

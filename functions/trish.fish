@@ -9,7 +9,9 @@ function trish -d 'Send files to the trashcan'
 	end
 	
 	# Variables common to all trish functions
-	set common (__trish_find_trash) ; set trash $common[1] ; set itemlist $common[2]
+	set trash (__trish_find_trash trash)
+	set itemlist (__trish_find_trash itemlist)
+	set trashcount (__trish_find_trash trashcount)
 
 	# NO ARGUMENTS - Display basic usage
 	if test -z "$argv"
