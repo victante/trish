@@ -17,8 +17,8 @@ function trish -d 'Send files to the trashcan'
 
 	# NO ARGUMENTS - Display basic usage
 	if test -z "$argv"
-		echo 'Usage:'
 		echo 'trish: expected at least one argument'
+		echo 'see \'trish --help\' for more details'
 	 	return
 	end
 
