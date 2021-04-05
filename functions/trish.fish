@@ -15,10 +15,11 @@ function trish -d 'Send files to the trashcan'
 	set trash $XDG_DATA_HOME/Trash
 	mkdir -p $trash/{files,info}
 
-	# NO ARGUMENTS - Same as trishl
+	# NO ARGUMENTS - Display basic usage
 	if test -z "$argv"
-		trishl
-		return
+		echo 'Usage:'
+		echo 'trish: expected at least one argument'
+	 	return
 	end
 
 	# WITH ARGUMENTS TO BE SENT TO TRASH
@@ -44,6 +45,9 @@ function trish -d 'Send files to the trashcan'
 		echo -e [Trash Info]\nPath=(string escape --no-quoted --style=url $itempath)\nDeletionDate=(date +%FT%T) > $infofile
 
 		# finally, move the specified item to the trashcan
-		mv $itempath $trash/files/$name
+		mv $itempath $trash/files/$name 2> /dev/null
+		if test $status -eq 1
+			printf 'Error: %s doesn\'t exist\n' $itempath
+		end
 	end
 end
