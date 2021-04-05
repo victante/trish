@@ -1,6 +1,6 @@
 function trishl -d 'List the contents of the trashcan'
 	# Argument parsing
-	argparse --exclusive h,p,l 'h/help' 'p/peek=' 'l/long' -- $argv
+	argparse --exclusive h,p 'h/help' 'p/peek=' -- $argv
 	
 	# "HELP" ARGUMENT
 	if set -q _flag_help
@@ -24,8 +24,8 @@ function trishl -d 'List the contents of the trashcan'
 		return
 	end
 
-	# "LONG" ARGUMENT - print a table with index, type (file or dir), name of the file and original path
-	if set -q _flag_long
+	# NO ARGUMENTS - list the contents of the trashcan
+	if test -z "$argv"
 		for index in (seq (count $itemlist))
 			if test -d $trash/files/$itemlist[$index]
 				set type dir
@@ -39,14 +39,6 @@ function trishl -d 'List the contents of the trashcan'
 		end
 		string trim (echo -e $table) | column -t -s (printf \t) -N Index,Type,Name,'Original Path'
 		return
-	end
-
-	# NO ARGUMENTS - print a simple list containing an index number and the name of the item on the trashcan
-	if test -z "$argv"
-		for index in (seq (count $itemlist))
-			set -a list (string join '\t' [$index] $itemlist[$index]'\n')
-		end
-		string trim (echo -e $list) | column -t -s (printf \t)
 	end
 end
 
