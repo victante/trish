@@ -37,7 +37,6 @@ $ trish
 
 These still need to be implemented:
 
-- The whole trishr function (to restore files from the trash);
 - The help argument in each function;
 - This Readme file, explaining how to use each function.
 
@@ -45,7 +44,8 @@ These are already working:
 
 - trish function (to put files in the trash);
 - trishl function (to list what's in the trash);
-- trishc function (to clear the trash, or parts of it).
+- trishc function (to clean the trash, or parts of it);
+- trishr functions (to restore items from the trash).
 
 
 ## The name
