@@ -4,16 +4,12 @@ function trish -d 'Send files to the trashcan'
 
 	# "HELP" ARGUMENT
 	if set -q _flag_help
-		#display help
-		return
+		__trish_help trish
+		return 0
 	end
 	
-	# Locating the Trash folder
-	if test -z "$XDG_DATA_HOME"
-		set XDG_DATA_HOME ~/.local/share
-	end
-	set trash $XDG_DATA_HOME/Trash
-	mkdir -p $trash/{files,info}
+	# Variables common to all trish functions
+	set common (__trish_find_trash) ; set trash $common[1] ; set itemlist $common[2]
 
 	# NO ARGUMENTS - Display basic usage
 	if test -z "$argv"

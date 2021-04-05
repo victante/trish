@@ -1,25 +1,24 @@
-function trishc -d 'Clear whole trashcan or sections of it'
+function trishc -d 'Clean whole trashcan or sections of it'
 	# Argument parsing
 	argparse --exclusive h,a,o 'h/help' 'a/all' 'o#old' -- $argv
 
 	# "HELP" ARGUMENT
 	if set -q _flag_help
-		return
+		__trish_help trishc
+		return 0
 	end
 
-	# Locating the Trash folder
-	if test -z "$XDG_DATA_HOME"
-		set XDG_DATA_HOME ~/.local/share
-	end
-	set trash $XDG_DATA_HOME/Trash
-	mkdir -p $trash/{files,info}
+	# Variables common to all trish functions
+	set common (__trish_find_trash) ; set trash $common[1] ; set itemlist $common[2] ; set trashcount $common[3]
 
 	# "ALL" ARGUMENT
 	if set -q _flag_all
-		read -P (set_color red ; echo -n 'Permanently remove all files? [y/n] ' ; set_color normal) confirmation
+		set_color red ; printf 'Permanently delete all %i files in the trash? [y/n]\n' (count $itemlist) ; set_color normal
+		read -P (set_color red ; echo -n '>> ' ; set_color normal) confirmation
 		switch $confirmation
 			case y Y yes Yes YES
-				rm -r $trash/{files,info}/*
+				rm -rf $trash/{files,info}/*
+				set_color green ; echo 'Done' ; set_color normal
 			case n N no No NO
 				echo 'Canceled'
 			case '*'
@@ -27,10 +26,6 @@ function trishc -d 'Clear whole trashcan or sections of it'
 		end
 		return
 	end
-
-	# Defining the list of items in the trashcan
-	set itemlist (command ls -a $trash/files)
-	set -e itemlist[1 2] # remove '.' and '..' directories
 
 	# "OLD" ARGUMENT
 	if set -q _flag_old
@@ -42,20 +37,24 @@ function trishc -d 'Clear whole trashcan or sections of it'
 			set datediff (math \($today - $age\) / 86400)
 			# If the item is $_flag_old days old or older, it gets deleted
 			if test $datediff -ge $_flag_old
-				rm -r $trash/files/$item
+				rm -rf $trash/files/$item
 				rm -r $trash/info/$item.trashinfo
 				set count (math $count + 1)
 			end
 		end
-		printf "Deleted %i files that were %i days or more in the trash\n" $count $_flag_old
+		set_color green ; printf "Deleted %i items that were %i days or more in the trash\n" $count $_flag_old
 		return
 	end
 
 	# NO ARGUMENTS - INTERACTIVE CLEANING
 	if test -z "$argv"
+		if test $trashcount -eq 0
+			echo 'Trash is already empty =)'
+			return
+		end
 		# List contents of the trashcan
-		trishl -l ; echo
-		set_color blue ; echo "Delete which files? (e.g. '1 3 5..8')"
+		trishl ; echo
+		set_color blue ; echo "Which items delete?"
 		read -a -P (set_color blue; echo -n ">> " ; set_color normal) dellist
 		# resolving ranges
 		for index in (seq (count $dellist)) # need to work with indexes to remove ranges from the list once resolved
@@ -77,7 +76,7 @@ function trishc -d 'Clear whole trashcan or sections of it'
 			test $item -ge 1 -a $item -le (count $itemlist) 2> /dev/null
 			# if $item is out of range, test gives status 1. If it's not even a number, status 2.
 			set indicator $status
-			if test $indicator -eq 1 -a $item -le 0 2> /dev/null #don't want function to stop if $item can't be compared here
+			if test $indicator -eq 1 -a $item -le 0 2> /dev/null
 				set_color red ; printf "Invalid input '%s'\nUse only non-zero positive integers\n" $item
 				return
 			else if test $indicator -eq 1 -a $item -gt (count $itemlist) 2> /dev/null
@@ -93,7 +92,7 @@ function trishc -d 'Clear whole trashcan or sections of it'
 		for index in (seq (count $itemlist))
 			if string match --quiet "$index" $dellist
 				rm -r $trash/info/$itemlist[$index].trashinfo
-				rm -r $trash/files/$itemlist[$index]
+				rm -rf $trash/files/$itemlist[$index]
 				set -a deleted $itemlist[$index]
 			end
 		end

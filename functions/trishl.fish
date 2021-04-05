@@ -4,19 +4,12 @@ function trishl -d 'List the contents of the trashcan'
 	
 	# "HELP" ARGUMENT
 	if set -q _flag_help
-		return
+		__trish_help trishl
+		return 0
 	end
 
-	# Locating the Trash folder
-	if test -z "$XDG_DATA_HOME"
-		set XDG_DATA_HOME ~/.local/share
-	end
-	set trash $XDG_DATA_HOME/Trash
-	mkdir -p $trash/{files,info}
-	
-	# Defining the list of items in the trashcan
-	set itemlist (command ls -a $trash/files)
-	set -e itemlist[1 2] # remove '.' and '..' directories
+	# Variables common to all trish functions
+	set common (__trish_find_trash) ; set trash $common[1] ; set itemlist $common[2]
 
 	# "PEEK" ARGUMENT - print the contents of a specified directory in the trashcan
 	if set -q _flag_peek
