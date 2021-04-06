@@ -13,6 +13,12 @@ function trishc -d 'Clean whole trashcan or sections of it'
 	set itemlist (__trish_find_trash itemlist)
 	set trashcount (__trish_find_trash trashcount)
 
+	# Empty trash
+	if test $trashcount -eq 0
+		set_color green ; echo 'Nothing to clean, trash is already empty =)' ; set_color normal
+		return 0
+	end
+
 	# "ALL" ARGUMENT
 	if set -q _flag_all
 		set_color red ; printf '%i file(s) in trash. Delete? [y/n]\n' (count $itemlist) ; set_color normal
@@ -44,16 +50,19 @@ function trishc -d 'Clean whole trashcan or sections of it'
 				set count (math $count + 1)
 			end
 		end
-		set_color green ; printf "Deleted %i items that were %i days or more in the trash\n" $count $_flag_old
-		return
+		switch $count
+			case 0
+				set_color green ; printf 'No items older than %i days in the trash\n' $_flag_old
+			case 1
+				set_color green ; printf 'Deleted 1 item that was %i days or more in the trash\n' $_flag_old
+			case '*'
+				set_color green ; printf "Deleted %i items that were %i days or more in the trash\n" $count $_flag_old
+		end
+		return 0
 	end
 
 	# NO ARGUMENTS - INTERACTIVE CLEANING
 	if test -z "$argv"
-		if test $trashcount -eq 0
-			echo 'Trash is already empty =)'
-			return
-		end
 		# List contents of the trashcan
 		trishl ; echo
 		set_color blue ; echo "Which items delete?"

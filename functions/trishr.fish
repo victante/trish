@@ -13,12 +13,14 @@ function trishr -d "Restore files from the trashcan"
 	set itemlist (__trish_find_trash itemlist)
 	set trashcount (__trish_find_trash trashcount)
 
+	# Empty trash
+	if test $trashcount -eq 0
+		set_color green ; echo 'Nothing to restore, trash is empty =)' ; set_color normal
+		return 0
+	end
+
 	# "ALL" ARGUMENT
 	if set -q _flag_all
-		if test $trashcount -eq 0
-			echo 'Trash is empty =)'
-			return
-		end
 		set_color blue ; printf '%i file(s) in trash. Restore? [y/n]\n' (count $itemlist) ; set_color normal
 		read -P (set_color blue ; echo -n '>> ' ; set_color normal) confirm1
 		echo
@@ -60,10 +62,6 @@ function trishr -d "Restore files from the trashcan"
 
 	# NO ARGUMENTS - Interactive restoring
 	if test -z "$argv"
-		if test $trashcount -eq 0
-			echo 'Empty is empty =)'
-			return
-		end
 		# List contents of the trashcan
 		trishl ; echo
 		set_color blue ; echo "Which items restore?"
