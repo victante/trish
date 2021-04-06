@@ -15,7 +15,7 @@ function trishc -d 'Clean whole trashcan or sections of it'
 
 	# "ALL" ARGUMENT
 	if set -q _flag_all
-		set_color red ; printf 'Permanently delete all %i files in the trash? [y/n]\n' (count $itemlist) ; set_color normal
+		set_color red ; printf '%i file(s) in trash. Delete? [y/n]\n' (count $itemlist) ; set_color normal
 		read -P (set_color red ; echo -n '>> ' ; set_color normal) confirmation
 		switch $confirmation
 			case y Y yes Yes YES
