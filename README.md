@@ -12,13 +12,33 @@
 
 ## Install
 
-It will be possible to install with
+### OMF
+
+```fish
+$ omf install https://github.com/victante/trish
+```
+
+If/when OMF maintainers approve this package on their repo, it will be easier to install:
 
 ```fish
 $ omf install trish
 ```
 
-...after I request OMF maintainers to add trish to their repos. For now, I'd recommend manually putting the files in your fish functions folder:
+### Fisher
+
+```fish
+$ fisher install victante/trish
+```
+
+### Fundle
+
+Insert `fundle plugin 'victante/trish'` in your config.fish, before the `fundle init` line. Reload the shell and then run:
+
+```fish
+$ fundle install
+```
+
+### Manual installation
 
 ```fish
 $ git clone https://github.com/victante/trish
