@@ -1,6 +1,6 @@
 function trishc -d 'Clean whole trashcan or sections of it'
 	# Argument parsing
-	argparse --exclusive h,a,o 'h/help' 'a/all' 'o#old' -- $argv
+	argparse --exclusive h,a,o 'h/help' 'a/all' 'o#old!_validate_int --min 0' -- $argv
 
 	# "HELP" ARGUMENT
 	if set -q _flag_help

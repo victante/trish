@@ -29,23 +29,17 @@ $ mv trish/functions/* ~/.config/fish/functions
 ## Usage
 
 ```fish
-$ trish
+$ trish ITEMS # send ITEMS to the trash
+$ trishl # list what's in the trash
+$ trishl [-p INT/--peek INT/-INT] # list the contents of the deleted folder of index INT
+$ trishc # enter interactive mode for cleaning the trash
+$ trishc [-a/--all] # clean the entire trash folder at once
+$ trishc [-o INT/--old INT/-INT] # clean all files that were in the trash for INT days or more
+$ trishr # enter interactive mode for restoring items from the trash
+$ trishr [-a/--all] # restore all items from the trash
 ```
 
-
-## Missing parts
-
-These still need to be implemented:
-
-- The help argument in each function;
-- This Readme file, explaining how to use each function.
-
-These are already working:
-
-- trish function (to put files in the trash);
-- trishl function (to list what's in the trash);
-- trishc function (to clean the trash, or parts of it);
-- trishr functions (to restore items from the trash).
+All 4 functions also have a '-h/--help' flag to display a nice little help text.
 
 
 ## The name
