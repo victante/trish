@@ -20,6 +20,19 @@ function trish -d 'Send files to the trashcan'
 	 	return
 	end
 
+    if test (count $argv) -eq (count command 'ls')
+        set confirm (string lower (read -l -P 'Do you want to trash all the files in this folder? [y/N] '))
+
+        if test $confirm = 'n'
+            return 0
+        end
+
+        if test $confirm != 'y'
+            echo 'trish: invalid option provided'
+            return 0
+        end
+    end
+
 	# WITH ARGUMENTS TO BE SENT TO TRASH
 	for item in $argv
 		# each item being trashed is tested against the contents of the trashcan
